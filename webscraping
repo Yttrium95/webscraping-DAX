@@ -1,0 +1,45 @@
+import urllib2
+import time
+from bs4 import BeautifulSoup
+import csv
+from datetime import datetime
+
+dax_value_list = []
+dax_time_dict = {}
+sample_time = 2
+sample_number = 2
+i = 0
+
+while i < sample_number:
+
+	current_time = (datetime.now())
+
+	dax = "link to website"
+
+	page = urllib2.urlopen(dax)
+	soup = BeautifulSoup(page, 'html.parser') 
+	
+	chart = soup.find_all(class_='price')
+	dax   = chart[0]
+	
+	dax_value = dax.get_text()
+	dax_value_list.append(dax_value)
+	
+	dax_time_dict[current_time] = dax_value
+
+	
+	
+	with open('dax_tablefile.csv', 'a') as dax_tablefile:
+		dax_writer = csv.writer(dax_tablefile)
+	
+		dax_writer.writerow([dax_time_dict[current_time]])
+
+	time.sleep(sample_time)
+	
+	i +=1
+
+	
+
+
+	
+	
